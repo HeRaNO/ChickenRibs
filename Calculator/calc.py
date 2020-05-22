@@ -12,7 +12,7 @@ class Stack:
 		self.sta.pop()
 
 # Part 0. Input and prepare.
-s = input('Input an expression only contains numbers and \'+\', \'-\', \'*\' and \'/\':\n')
+s = input('Input an expression only contains numbers and \'+\', \'-\', \'*\', \'/\' and brackets:\n')
 s = '0' + s
 n = len(s)
 cp = {'+' : 0, '-' : 0, '*' : 1, '/' : 1, '(': -1}
