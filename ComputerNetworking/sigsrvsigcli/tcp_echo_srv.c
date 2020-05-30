@@ -1,3 +1,4 @@
+// Author: HeRaNO
 #include <errno.h>
 #include <stdio.h>
 #include <signal.h>
@@ -15,6 +16,7 @@ char buf[MAX_CMD_STR + 1];
 
 void sig_pipe(int sig)
 {
+	printf("[srv] SIGPIPE is coming!\n");
 	return ;
 }
 
