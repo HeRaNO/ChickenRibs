@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace = "dao.IStudentDAO">
+    <resultMap type = "model.Student" id = "studentMap">
+        <id property = "SID" column = "SID"/>
+        <result property = "SName" column = "SName"/>
+        <result property = "Sex" column = "Sex"/>
+        <result property = "Age" column = "Age"/>
+        <collection property = "Grades" ofType = "model.Grade"
+                    javaType = "ArrayList"
+                    resultMap = "dao.IGradeDAO.gradeMap"
+        />
+    </resultMap>
+    <select id = "findByID" resultMap = "studentMap">
+        SELECT * FROM (STUDENT NATURAL JOIN GRADE) WHERE SID = #{SID};
+    </select>
+</mapper>

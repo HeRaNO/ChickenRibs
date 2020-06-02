@@ -1,0 +1,31 @@
+<html>
+    <head>
+        <title> Grade query system </title>
+        <style>
+            #Content
+            {
+                white-space:pre-wrap;
+            }
+        </style>
+    </head>
+    <body>
+        <h1> Simple Query Service </h1>
+        <h2> Enter your student id here. </h2>
+        <input type = "text" id = "Input"/>
+
+        <button id = "Query" type = "button" onclick = "BeginQuery()"> Query </button>
+        <h2>Results will be shown here.</h2>
+
+        <div id = "Content"> </div>
+
+    </body>
+    <script>
+        function BeginQuery() {
+            var xhttp = new XMLHttpRequest();
+            var url = "/GradeQuerySystem/query?student_id=" + document.getElementById("Input").value
+            xhttp.open("GET", url, false);
+            xhttp.send();
+            document.getElementById("Content").innerHTML = xhttp.responseText;
+        }
+    </script>
+</html>

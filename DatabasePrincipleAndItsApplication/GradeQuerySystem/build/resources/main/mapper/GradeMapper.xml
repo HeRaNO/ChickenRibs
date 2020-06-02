@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace = "dao.IGradeDAO">
+    <resultMap type = "model.Grade" id = "gradeMap">
+        <id property = "PK.SID" column = "SID"/>
+        <id property = "PK.CID" column = "CID"/>
+        <result property = "Score" column = "Score"/>
+        <result property = "Note" column = "Note"/>
+        <association property = "Student" javaType = "model.Student"
+                     resultMap = "dao.IStudentDAO.studentMap">
+            <result property = "SID" column = "sid"/>
+        </association>
+        <association property = "Course" javaType = "model.Course">
+            <result property = "CID" column = "CID"/>
+            <result property = "CName" column = "CName"/>
+            <result property = "Teacher" column = "Teacher"/>
+        </association>
+    </resultMap>
+    <select id = "findGradeByStudentIDAndCourseID" resultMap = "gradeMap">
+        SELECT * FROM (GRADE NATURAL JOIN STUDENT NATURAL JOIN COURSE) WHERE SID = #{arg0} AND CID = #{arg1};
+    </select>
+    <select id = "findGradeByCourseName" resultMap = "gradeMap"
+            parameterType = "java.lang.String">
+        SELECT * FROM (GRADE NATURAL JOIN STUDENT NATURAL JOIN COURSE) WHERE CName = #{name, jdbcType=VARCHAR};
+    </select>
+    <select id = "findGradeByStudentName" resultMap = "gradeMap"
+            parameterType = "java.lang.String">
+        SELECT * FROM (GRADE NATURAL JOIN STUDENT NATURAL JOIN COURSE) WHERE SName = #{name, jdbcType=VARCHAR};
+    </select>
+    <select id = "findGradeByStudentID" resultMap = "gradeMap">
+        SELECT * FROM (GRADE NATURAL JOIN STUDENT NATURAL JOIN COURSE) WHERE SID = #{sid};
+    </select>
+</mapper>
