@@ -1,10 +1,10 @@
 # TCP 单进程单循环服务器与单进程客户端
 
-实验内容见[这里](https://docs.qq.com/doc/DRFF2ZkdXdlF6R2xp)。
+实验内容见[这里](https://docs.qq.com/doc/DRFF2ZkdXdlF6R2xp)。因为被某 wrj 老师泄露了答案，所以改成了 `new` 文件夹下的样子。
 
 函数名必须和指导书保持一致这我是没想到的。
 
 查系统调用判题是坏文明。
 
-HeRaNO @ 2020.5.30
+HeRaNO @ 2020.6.8
 
