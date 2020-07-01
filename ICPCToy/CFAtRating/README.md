@@ -16,6 +16,14 @@ pip install -r requirements.txt
 - `secret`：Codeforces 的 API secret，上述两者需要事先在 `https://codeforces.com/settings/api` 申请；
 - `stdTime`：统计的截止时间，格式同 UNIX 时间戳（以秒为单位，建议先获取截止场次的 `ratingUpdateTimeSeconds` 后填写）。
 
+输入如下命令使用：
+
+```bash
+python cfrating.py <userFile>
+```
+
+其中，`userFile` 中包含所有需要统计 Rating 的用户名，一行一个。
+
 `atrating.py` 还没写，因为没 API 写起来挺麻烦的……
 
 HeRaNO @ 2020.7.2
