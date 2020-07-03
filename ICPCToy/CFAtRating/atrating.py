@@ -1,6 +1,6 @@
 import sys
-import requests
 
+import requests
 from bs4 import BeautifulSoup
 
 def getUserRating(userName):
