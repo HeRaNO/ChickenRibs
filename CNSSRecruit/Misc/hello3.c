@@ -1,0 +1,1 @@
+main(){if (puts("Hi, CNSS!")){}}
