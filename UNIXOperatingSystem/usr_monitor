@@ -1,0 +1,27 @@
+#!/bin/sh
+# This program is for check one user's login status.
+# Usage: usr_monitor username
+# Author: Heran Yang
+# Student ID: 2018091602012
+
+if [ $# -ne 1 ]
+then
+	echo "Usage: usr_monitor username"
+	exit 0
+fi
+
+while true
+do
+	loginUser=`who|cut -d ' ' -f 1`
+	if [[ $loginUser == *$1* ]]
+	then
+		echo "user [ $1 ] is log in."
+		exit 0
+	fi
+	echo "waiting user [ $1 ]..."
+	sleep 5s	
+done
+
+exit 0
+
+
