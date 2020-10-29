@@ -1,8 +1,7 @@
 #! /bin/sh
 # This program is for create a file and add characters automatically at backstage.
 # Usage: ./createfile.sh &
-# Author: Heran Yang
-# Student ID: 2018091602012
+# Author: HeRaNO
 # WARNING: The PID should be remembered! KILL IT after finishing your job.
 
 filename="afile"

@@ -1,8 +1,7 @@
 #! /bin/sh
 # This program can create a file and save the sentence inputed in the terminal. Terminated when input a null line.
 # Usage: ./exam1.sh filename
-# Author: Heran Yang
-# Student ID: 2018091602012
+# Author: HeRaNO
 
 if [ $# -ne 1 ]
 then

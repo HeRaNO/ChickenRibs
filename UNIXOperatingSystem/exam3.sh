@@ -1,8 +1,7 @@
 #!/bin/sh
 # This program is for monitoring a file.
 # Usage: ./exam3.sh filename
-# Author: Heran Yang
-# Student ID: 2018091602012
+# Author: HeRaNO
 
 if [ $# -ne 1 ]
 then
