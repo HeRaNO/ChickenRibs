@@ -3,6 +3,7 @@
 与 DOMjudge 有关的乱七八糟的东西。
 
 - `getDOMjudgeSubmissions.py`：从 DOMjudge 上获取比赛的所有提交。
+- `generatePwd.py`：生成六位随机密码（`0-9a-z`）。
 
 滚榜注意：
 
