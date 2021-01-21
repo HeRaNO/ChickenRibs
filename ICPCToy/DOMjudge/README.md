@@ -12,7 +12,7 @@
 - 要把下载下来的 `event-feed` 加上 `.json` 后缀名！！！
 - 不要手贱多次 Finalize！！！
 - 要等 TOO-LATE 测评完；
-- Observer 隐藏再 Award 之后还要手动删掉这些队，但是可能会导致 Invalid Submissions；
+- Observer 隐藏再 Award 之后还要手动删掉这些队，但是可能会导致 Invalid Submissions；（需要继续测试）
 - 114514 个技术细节没确定……
 
 Judgehost 注意：
