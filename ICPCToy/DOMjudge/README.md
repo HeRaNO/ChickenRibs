@@ -7,9 +7,9 @@
 
 滚榜注意：
 
-- **使用 2.1.2100** 版，在 Bash 下运行 `ICPC_FONT="Microsoft Yahei" ./resolver.bat awards.json`；
+- **使用 2.2.415** 版，在 Bash 下运行 `ICPC_FONT="Microsoft Yahei" ./resolver.bat awards.json`；
 - 或者 `Microsoft JhengHei`，是个中文字体就行；
-
+- 要把下载下来的 `event-feed` 加上 `.json` 后缀名！！！
 - 不要手贱多次 Finalize！！！
 - 要等 TOO-LATE 测评完；
 - Observer 隐藏再 Award 之后还要手动删掉这些队，但是可能会导致 Invalid Submissions；
@@ -25,6 +25,6 @@ Judgehost 注意：
 Web Server 注意：
 
 - 千兆网络，36 核 80G 平均 CPU 占用不超过 50%，内存也不超过 3G。
-
-- Docker 是个好东西
+- Docker 是个好东西；
+- 设置 MariaDB 密码不能有特殊字符。
 
