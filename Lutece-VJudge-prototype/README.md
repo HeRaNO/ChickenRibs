@@ -1,5 +1,5 @@
-# Lutece VJudge prototype
+# Lutece VJudge Prototype
 
-Lutece Vjudge 的一些原型。
+Lutece VJudge 的一些原型。
 
 HeRaNO @ 2021.1.27
