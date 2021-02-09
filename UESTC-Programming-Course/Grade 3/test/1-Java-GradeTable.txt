@@ -1,0 +1,6 @@
+Course ID: 1	Teacher Name: Chunhua Jiang
+Course name: Java	Class hour: 32	Credit: 2.0
+No.	Stu. ID	Score	No.	Stu. ID	Score
+1	2	97	3	5	95
+2	4	95	4	1	92
+Sum of student: 4	Average Score: 94.75	Teacher sign:	Register date:

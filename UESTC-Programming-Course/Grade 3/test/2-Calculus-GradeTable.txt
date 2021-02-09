@@ -1,0 +1,7 @@
+Course ID: 2	Teacher Name: Jian Gao
+Course name: Calculus	Class hour: 80	Credit: 5.5
+No.	Stu. ID	Score	No.	Stu. ID	Score
+1	5	97	4	2	74
+2	1	87	5	3	65
+3	4	83
+Sum of student: 5	Average Score: 81.2	Teacher sign:	Register date:

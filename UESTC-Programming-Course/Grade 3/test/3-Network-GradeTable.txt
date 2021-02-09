@@ -1,0 +1,6 @@
+Course ID: 3	Teacher Name: Chong Fu
+Course name: Network	Class hour: 80	Credit: 5.5
+No.	Stu. ID	Score	No.	Stu. ID	Score
+1	2	91	3	1	88
+2	4	90	4	5	83
+Sum of student: 4	Average Score: 88.0	Teacher sign:	Register date:
