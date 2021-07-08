@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 
 def getUserRating(userName):
 	website = 'https://atcoder.jp/users/' + userName + '/history'
-	r = requests.get(website)
+	r = requests.get(website, verify = False)
 
 	if r.status_code != 200 and r.status_code != 404:
 		raise RuntimeError('Website returns status code: ' + str(r.status_code))
