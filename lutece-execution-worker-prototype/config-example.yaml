@@ -1,0 +1,14 @@
+rootfs:
+  rootfsPath: 'path/to/rootfs'
+  containerFilePath: 'path/to/container_files'
+mq:
+  ip: '127.0.0.1'
+  port: 5672
+  userName: 'guest'
+  password: 'guest'
+cacheFilesPath: 'path/to/cacheFiles'
+minio:
+  endpoint: 'localhost'
+  accessKeyID: 'minioAccessKeyID'
+  secretAccessKey: 'secret'
+  useSSL: true
