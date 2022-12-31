@@ -1,0 +1,24 @@
+[zookd.c:70]
+请求路径长度过长，可能导致 reqpath 数组溢出
+
+    if ((errmsg = http_request_line(fd, reqpath, env, &env_len)))
+
+[http.c:95]
+若构造错误的协议版本，如 HTTP/1.111....11，将导致 env 数组溢出
+
+    envp += sprintf(envp, "SERVER_PROTOCOL=%s", sp2) + 1;
+
+[http.c:101]
+若构造足够长的查询串，如 ?aa...aa=bb...bb，将导致 env 数组溢出
+
+    envp += sprintf(envp, "QUERY_STRING=%s", qp + 1) + 1;
+
+[http.c:159]
+若某行 HTTP 请求头中的值足够长，如 AA: BB...BBB，将导致 value 数组溢出
+
+    url_decode(value, sp);
+
+[http.c:165]
+若某行 HTTP 请求头中的键足够长，如 AA..AAA: BB，将导致 envvar 数组溢出，并影响 value
+
+    sprintf(envvar, "HTTP_%s", buf);
