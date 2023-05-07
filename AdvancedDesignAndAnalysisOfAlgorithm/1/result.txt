@@ -1,0 +1,210 @@
+n = 10
+naive time used: 0.047000s
+graham time used: 0.047000s
+dc time used: 0.046000s
+ok ok
+ok ok
+n = 20
+naive time used: 0.031000s
+graham time used: 0.031000s
+dc time used: 0.031000s
+ok ok
+ok ok
+n = 30
+naive time used: 0.016000s
+graham time used: 0.031000s
+dc time used: 0.031000s
+ok ok
+ok ok
+n = 40
+naive time used: 0.031000s
+graham time used: 0.016000s
+dc time used: 0.015000s
+ok ok
+ok ok
+n = 50
+naive time used: 0.015000s
+graham time used: 0.032000s
+dc time used: 0.031000s
+ok ok
+ok ok
+n = 60
+naive time used: 0.031000s
+graham time used: 0.032000s
+dc time used: 0.031000s
+ok ok
+ok ok
+n = 70
+naive time used: 0.015000s
+graham time used: 0.031000s
+dc time used: 0.032000s
+ok ok
+ok ok
+n = 80
+naive time used: 0.031000s
+graham time used: 0.016000s
+dc time used: 0.031000s
+ok ok
+ok ok
+n = 90
+naive time used: 0.031000s
+graham time used: 0.015000s
+dc time used: 0.032000s
+ok ok
+ok ok
+n = 100
+naive time used: 0.016000s
+graham time used: 0.031000s
+dc time used: 0.032000s
+ok ok
+ok ok
+n = 100
+naive time used: 0.031000s
+graham time used: 0.031000s
+dc time used: 0.031000s
+ok ok
+ok ok
+n = 200
+naive time used: 0.032000s
+graham time used: 0.031000s
+dc time used: 0.031000s
+ok ok
+ok ok
+n = 300
+naive time used: 0.032000s
+graham time used: 0.031000s
+dc time used: 0.031000s
+ok ok
+ok ok
+n = 400
+naive time used: 0.031000s
+graham time used: 0.032000s
+dc time used: 0.031000s
+ok ok
+ok ok
+n = 500
+naive time used: 0.031000s
+graham time used: 0.031000s
+dc time used: 0.032000s
+ok ok
+ok ok
+n = 600
+naive time used: 0.031000s
+graham time used: 0.031000s
+dc time used: 0.032000s
+ok ok
+ok ok
+n = 700
+naive time used: 0.031000s
+graham time used: 0.031000s
+dc time used: 0.031000s
+ok ok
+ok ok
+n = 800
+naive time used: 0.031000s
+graham time used: 0.032000s
+dc time used: 0.031000s
+ok ok
+ok ok
+n = 900
+naive time used: 0.031000s
+graham time used: 0.032000s
+dc time used: 0.031000s
+ok ok
+ok ok
+n = 1000
+naive time used: 0.047000s
+graham time used: 0.016000s
+dc time used: 0.031000s
+ok ok
+ok ok
+n = 1000
+naive time used: 0.032000s
+graham time used: 0.031000s
+dc time used: 0.031000s
+ok ok
+ok ok
+n = 2000
+naive time used: 0.078000s
+graham time used: 0.031000s
+dc time used: 0.032000s
+ok ok
+ok ok
+n = 3000
+naive time used: 0.125000s
+graham time used: 0.031000s
+dc time used: 0.047000s
+ok ok
+ok ok
+n = 4000
+naive time used: 0.156000s
+graham time used: 0.032000s
+dc time used: 0.031000s
+ok ok
+ok ok
+n = 5000
+naive time used: 0.234000s
+graham time used: 0.047000s
+dc time used: 0.032000s
+ok ok
+ok ok
+n = 6000
+naive time used: 0.344000s
+graham time used: 0.047000s
+dc time used: 0.031000s
+ok ok
+ok ok
+n = 7000
+naive time used: 0.625000s
+graham time used: 0.031000s
+dc time used: 0.047000s
+ok ok
+ok ok
+n = 8000
+naive time used: 0.500000s
+graham time used: 0.031000s
+dc time used: 0.047000s
+ok ok
+ok ok
+n = 9000
+naive time used: 0.718000s
+graham time used: 0.031000s
+dc time used: 0.047000s
+ok ok
+ok ok
+n = 10000
+naive time used: 1.062000s
+graham time used: 0.031000s
+dc time used: 0.047000s
+ok ok
+ok ok
+n = 10000
+graham time used: 0.046000s
+dc time used: 0.047000s
+n = 20000
+graham time used: 0.047000s
+dc time used: 0.062000s
+n = 30000
+graham time used: 0.062000s
+dc time used: 0.063000s
+n = 40000
+graham time used: 0.078000s
+dc time used: 0.094000s
+n = 50000
+graham time used: 0.094000s
+dc time used: 0.094000s
+n = 60000
+graham time used: 0.093000s
+dc time used: 0.110000s
+n = 70000
+graham time used: 0.110000s
+dc time used: 0.125000s
+n = 80000
+graham time used: 0.125000s
+dc time used: 0.141000s
+n = 90000
+graham time used: 0.141000s
+dc time used: 0.156000s
+n = 100000
+graham time used: 0.141000s
+dc time used: 0.187000s

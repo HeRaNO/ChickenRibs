@@ -1,0 +1,56 @@
+k = 0
+quick_sort_random time used: 1.325000s
+quick_sort_random_renew time used: 1.308000s
+quick_sort_algorithm time used: 1.303000s
+ok single line: '-999998869 -999997909 -9999973...1 999996333 999996810 999998541'
+ok single line: '-999998869 -999997909 -9999973...1 999996333 999996810 999998541'
+k = 1
+quick_sort_random time used: 7.054000s
+quick_sort_random_renew time used: 1.282000s
+quick_sort_algorithm time used: 1.269000s
+ok single line: '-999999125 -999997955 -9999960...000000000 1000000000 1000000000'
+ok single line: '-999999125 -999997955 -9999960...000000000 1000000000 1000000000'
+k = 2
+quick_sort_random time used: 24.132000s
+quick_sort_random_renew time used: 1.303000s
+quick_sort_algorithm time used: 1.307000s
+ok single line: '-999999237 -999998719 -9999973...000000000 1000000000 1000000000'
+ok single line: '-999999237 -999998719 -9999973...000000000 1000000000 1000000000'
+k = 3
+quick_sort_random time used: 52.268000s
+quick_sort_random_renew time used: 1.290000s
+quick_sort_algorithm time used: 1.274000s
+ok single line: '-999997822 -999995960 -9999954...000000000 1000000000 1000000000'
+ok single line: '-999997822 -999995960 -9999954...000000000 1000000000 1000000000'
+k = 4
+quick_sort_random time used: 92.209000s
+quick_sort_random_renew time used: 2.709000s
+quick_sort_algorithm time used: 1.278000s
+ok single line: '-999997171 -999993585 -9999901...000000000 1000000000 1000000000'
+ok single line: '-999997171 -999993585 -9999901...000000000 1000000000 1000000000'
+k = 5
+quick_sort_random time used: 143.905000s
+quick_sort_random_renew time used: 1.304000s
+quick_sort_algorithm time used: 1.283000s
+ok single line: '-999996325 -999985399 -9999849...000000000 1000000000 1000000000'
+ok single line: '-999996325 -999985399 -9999849...000000000 1000000000 1000000000'
+k = 6
+quick_sort_random_renew time used: 1.327000s
+quick_sort_algorithm time used: 1.275000s
+ok single line: '-999998260 -999996506 -9999628...000000000 1000000000 1000000000'
+k = 7
+quick_sort_random_renew time used: 1.291000s
+quick_sort_algorithm time used: 1.276000s
+ok single line: '-999999821 -999996418 -9999921...000000000 1000000000 1000000000'
+k = 8
+quick_sort_random_renew time used: 1.244000s
+quick_sort_algorithm time used: 1.270000s
+ok single line: '-999998059 -999990871 -9999877...000000000 1000000000 1000000000'
+k = 9
+quick_sort_random_renew time used: 1.267000s
+quick_sort_algorithm time used: 1.284000s
+ok single line: '-999998746 -999967572 -9999553...000000000 1000000000 1000000000'
+k = 10
+quick_sort_random_renew time used: 1.231000s
+quick_sort_algorithm time used: 1.283000s
+ok single line: '1000000000 1000000000 10000000...000000000 1000000000 1000000000'

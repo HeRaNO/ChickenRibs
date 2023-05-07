@@ -1,0 +1,13 @@
+|X| = |F| = 100
+greedy time used: 0.162000s
+lp time used: 0.644000s
+|X| = |F| = 1000
+greedy time used: 0.427000s
+lp time used: 12.510000s
+|X| = |F| = 5000
+greedy time used: 8.644000s
+lp time used: 475.676000s
+
+ok ok, greedy: 5, LP: 22
+ok ok, greedy: 7, LP: 146
+ok ok, greedy: 9, LP: 447
