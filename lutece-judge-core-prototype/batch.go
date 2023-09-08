@@ -11,31 +11,30 @@ import (
 
 func Batch(factory libcontainer.Factory, config *configs.Config) {
 	timeLimit := 1000 + 200
-	inputFile, err := os.Open("input")
-	if err != nil {
-		panic(err)
-	}
-	outputFile, err := os.OpenFile("user_out", os.O_CREATE|os.O_RDWR, 0644)
-	if err != nil {
-		panic(err)
-	}
-	errFile, err := os.OpenFile("errFile", os.O_CREATE|os.O_RDWR, 0644)
-	if err != nil {
-		panic(err)
-	}
+	// inputFile, err := os.Open("input")
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// outputFile, err := os.OpenFile("user_out", os.O_CREATE|os.O_RDWR, 0644)
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// errFile, err := os.OpenFile("errFile", os.O_CREATE|os.O_RDWR, 0644)
+	// if err != nil {
+	// 	panic(err)
+	// }
 	process := &libcontainer.Process{
-		Args:   []string{"./apb"},
-		Env:    []string{"PATH=/bin"},
-		Cwd:    "/judge-test",
-		User:   "test",
-		Stdin:  inputFile,
-		Stdout: outputFile,
-		Stderr: errFile,
+		Args: []string{"./nul"},
+		Env:  []string{"PATH=/bin"},
+		Cwd:  "/judge-test",
+		User: "root",
+		// Stdin:  inputFile,
+		// Stdout: outputFile,
+		// Stderr: errFile,
 		Init:   true,
-		/*Stdin:  os.Stdin,
+		Stdin:  os.Stdin,
 		Stdout: os.Stdout,
 		Stderr: os.Stderr,
-		*/
 	}
 
 	container, err := factory.Create("container-id", config)
@@ -94,8 +93,8 @@ func Batch(factory libcontainer.Factory, config *configs.Config) {
 	processStat := stat.CgroupStats
 	cpuStat := processStat.CpuStats
 	memoryStat := processStat.MemoryStats
-	log.Printf("cpuStat: %+v", cpuStat)
-	log.Printf("memoryStat: %+v", memoryStat)
+	log.Printf("cgroups cpuStat: %+v", cpuStat)
+	log.Printf("cgroups memoryStat: %+v", memoryStat)
 
 	log.Println(p.UserTime().Microseconds())
 	log.Println(p.SystemTime().Microseconds())

@@ -28,13 +28,13 @@ func init() {
 
 func main() {
 	abs, _ := filepath.Abs("./")
-	factory, err := libcontainer.New(abs, libcontainer.Cgroupfs, libcontainer.InitArgs(os.Args[0], "init"))
+	factory, err := libcontainer.New(abs, libcontainer.InitArgs(os.Args[0], "init"))
 	if err != nil {
 		log.Fatal(err)
 		return
 	}
 
-	memoryLimit := 32 << 20
+	memoryLimit := 128 << 20
 
 	defaultMountFlags := unix.MS_NOEXEC | unix.MS_NOSUID | unix.MS_NODEV
 	var devices []*devices.Rule
@@ -228,193 +228,193 @@ func main() {
 		},
 	}
 
-	configGrader := &configs.Config{
-		Rootfs: "/your/path/to/rootfs",
-		Capabilities: &configs.Capabilities{
-			Bounding: []string{
-				"CAP_CHOWN",
-				"CAP_DAC_OVERRIDE",
-				"CAP_FSETID",
-				"CAP_FOWNER",
-				"CAP_MKNOD",
-				"CAP_NET_RAW",
-				"CAP_SETGID",
-				"CAP_SETUID",
-				"CAP_SETFCAP",
-				"CAP_SETPCAP",
-				"CAP_NET_BIND_SERVICE",
-				"CAP_SYS_CHROOT",
-				"CAP_KILL",
-				"CAP_AUDIT_WRITE",
-			},
-			Effective: []string{
-				"CAP_CHOWN",
-				"CAP_DAC_OVERRIDE",
-				"CAP_FSETID",
-				"CAP_FOWNER",
-				"CAP_MKNOD",
-				"CAP_NET_RAW",
-				"CAP_SETGID",
-				"CAP_SETUID",
-				"CAP_SETFCAP",
-				"CAP_SETPCAP",
-				"CAP_NET_BIND_SERVICE",
-				"CAP_SYS_CHROOT",
-				"CAP_KILL",
-				"CAP_AUDIT_WRITE",
-			},
-			Inheritable: []string{
-				"CAP_CHOWN",
-				"CAP_DAC_OVERRIDE",
-				"CAP_FSETID",
-				"CAP_FOWNER",
-				"CAP_MKNOD",
-				"CAP_NET_RAW",
-				"CAP_SETGID",
-				"CAP_SETUID",
-				"CAP_SETFCAP",
-				"CAP_SETPCAP",
-				"CAP_NET_BIND_SERVICE",
-				"CAP_SYS_CHROOT",
-				"CAP_KILL",
-				"CAP_AUDIT_WRITE",
-			},
-			Permitted: []string{
-				"CAP_CHOWN",
-				"CAP_DAC_OVERRIDE",
-				"CAP_FSETID",
-				"CAP_FOWNER",
-				"CAP_MKNOD",
-				"CAP_NET_RAW",
-				"CAP_SETGID",
-				"CAP_SETUID",
-				"CAP_SETFCAP",
-				"CAP_SETPCAP",
-				"CAP_NET_BIND_SERVICE",
-				"CAP_SYS_CHROOT",
-				"CAP_KILL",
-				"CAP_AUDIT_WRITE",
-			},
-			Ambient: []string{
-				"CAP_CHOWN",
-				"CAP_DAC_OVERRIDE",
-				"CAP_FSETID",
-				"CAP_FOWNER",
-				"CAP_MKNOD",
-				"CAP_NET_RAW",
-				"CAP_SETGID",
-				"CAP_SETUID",
-				"CAP_SETFCAP",
-				"CAP_SETPCAP",
-				"CAP_NET_BIND_SERVICE",
-				"CAP_SYS_CHROOT",
-				"CAP_KILL",
-				"CAP_AUDIT_WRITE",
-			},
-		},
-		Namespaces: configs.Namespaces([]configs.Namespace{
-			{Type: configs.NEWNS},
-			{Type: configs.NEWUTS},
-			{Type: configs.NEWIPC},
-			{Type: configs.NEWPID},
-			{Type: configs.NEWUSER},
-			{Type: configs.NEWNET},
-			{Type: configs.NEWCGROUP},
-		}),
-		Cgroups: &configs.Cgroup{
-			Name:   "test-container",
-			Parent: "system",
-			Resources: &configs.Resources{
-				Memory:  int64(memoryLimit),
-				Devices: devices,
-			},
-		},
-		MaskPaths: []string{
-			"/proc/kcore",
-			"/sys/firmware",
-		},
-		ReadonlyPaths: []string{
-			"/proc/sys", "/proc/sysrq-trigger", "/proc/irq", "/proc/bus",
-		},
-		Devices:  specconv.AllowedDevices,
-		Hostname: "testing",
-		Mounts: []*configs.Mount{
-			{
-				Source:      "proc",
-				Destination: "/proc",
-				Device:      "proc",
-				Flags:       defaultMountFlags,
-			},
-			{
-				Source:      "tmpfs",
-				Destination: "/dev",
-				Device:      "tmpfs",
-				Flags:       unix.MS_NOSUID | unix.MS_STRICTATIME,
-				Data:        "mode=755",
-			},
-			{
-				Source:      "devpts",
-				Destination: "/dev/pts",
-				Device:      "devpts",
-				Flags:       unix.MS_NOSUID | unix.MS_NOEXEC,
-				Data:        "newinstance,ptmxmode=0666,mode=0620,gid=5",
-			},
-			{
-				Device:      "tmpfs",
-				Source:      "shm",
-				Destination: "/dev/shm",
-				Data:        "mode=1777,size=65536k",
-				Flags:       defaultMountFlags,
-			},
-			{
-				Source:      "mqueue",
-				Destination: "/dev/mqueue",
-				Device:      "mqueue",
-				Flags:       defaultMountFlags,
-			},
-			{
-				Source:      "sysfs",
-				Destination: "/sys",
-				Device:      "sysfs",
-				Flags:       defaultMountFlags | unix.MS_RDONLY,
-			},
-		},
-		UidMappings: []configs.IDMap{
-			{
-				ContainerID: 0,
-				HostID:      0,
-				Size:        65536,
-			},
-		},
-		GidMappings: []configs.IDMap{
-			{
-				ContainerID: 0,
-				HostID:      0,
-				Size:        65536,
-			},
-		},
-		Networks: []*configs.Network{
-			{
-				Type:    "loopback",
-				Address: "127.0.0.1/0",
-				Gateway: "localhost",
-			},
-		},
-		Rlimits: []configs.Rlimit{
-			{
-				Type: unix.RLIMIT_NOFILE,
-				Hard: uint64(15),
-				Soft: uint64(15),
-			},
-			{
-				Type: unix.RLIMIT_STACK,
-				Hard: uint64(memoryLimit),
-				Soft: uint64(memoryLimit),
-			},
-		},
-	}
+	// configGrader := &configs.Config{
+	// 	Rootfs: "/your/path/to/rootfs",
+	// 	Capabilities: &configs.Capabilities{
+	// 		Bounding: []string{
+	// 			"CAP_CHOWN",
+	// 			"CAP_DAC_OVERRIDE",
+	// 			"CAP_FSETID",
+	// 			"CAP_FOWNER",
+	// 			"CAP_MKNOD",
+	// 			"CAP_NET_RAW",
+	// 			"CAP_SETGID",
+	// 			"CAP_SETUID",
+	// 			"CAP_SETFCAP",
+	// 			"CAP_SETPCAP",
+	// 			"CAP_NET_BIND_SERVICE",
+	// 			"CAP_SYS_CHROOT",
+	// 			"CAP_KILL",
+	// 			"CAP_AUDIT_WRITE",
+	// 		},
+	// 		Effective: []string{
+	// 			"CAP_CHOWN",
+	// 			"CAP_DAC_OVERRIDE",
+	// 			"CAP_FSETID",
+	// 			"CAP_FOWNER",
+	// 			"CAP_MKNOD",
+	// 			"CAP_NET_RAW",
+	// 			"CAP_SETGID",
+	// 			"CAP_SETUID",
+	// 			"CAP_SETFCAP",
+	// 			"CAP_SETPCAP",
+	// 			"CAP_NET_BIND_SERVICE",
+	// 			"CAP_SYS_CHROOT",
+	// 			"CAP_KILL",
+	// 			"CAP_AUDIT_WRITE",
+	// 		},
+	// 		Inheritable: []string{
+	// 			"CAP_CHOWN",
+	// 			"CAP_DAC_OVERRIDE",
+	// 			"CAP_FSETID",
+	// 			"CAP_FOWNER",
+	// 			"CAP_MKNOD",
+	// 			"CAP_NET_RAW",
+	// 			"CAP_SETGID",
+	// 			"CAP_SETUID",
+	// 			"CAP_SETFCAP",
+	// 			"CAP_SETPCAP",
+	// 			"CAP_NET_BIND_SERVICE",
+	// 			"CAP_SYS_CHROOT",
+	// 			"CAP_KILL",
+	// 			"CAP_AUDIT_WRITE",
+	// 		},
+	// 		Permitted: []string{
+	// 			"CAP_CHOWN",
+	// 			"CAP_DAC_OVERRIDE",
+	// 			"CAP_FSETID",
+	// 			"CAP_FOWNER",
+	// 			"CAP_MKNOD",
+	// 			"CAP_NET_RAW",
+	// 			"CAP_SETGID",
+	// 			"CAP_SETUID",
+	// 			"CAP_SETFCAP",
+	// 			"CAP_SETPCAP",
+	// 			"CAP_NET_BIND_SERVICE",
+	// 			"CAP_SYS_CHROOT",
+	// 			"CAP_KILL",
+	// 			"CAP_AUDIT_WRITE",
+	// 		},
+	// 		Ambient: []string{
+	// 			"CAP_CHOWN",
+	// 			"CAP_DAC_OVERRIDE",
+	// 			"CAP_FSETID",
+	// 			"CAP_FOWNER",
+	// 			"CAP_MKNOD",
+	// 			"CAP_NET_RAW",
+	// 			"CAP_SETGID",
+	// 			"CAP_SETUID",
+	// 			"CAP_SETFCAP",
+	// 			"CAP_SETPCAP",
+	// 			"CAP_NET_BIND_SERVICE",
+	// 			"CAP_SYS_CHROOT",
+	// 			"CAP_KILL",
+	// 			"CAP_AUDIT_WRITE",
+	// 		},
+	// 	},
+	// 	Namespaces: configs.Namespaces([]configs.Namespace{
+	// 		{Type: configs.NEWNS},
+	// 		{Type: configs.NEWUTS},
+	// 		{Type: configs.NEWIPC},
+	// 		{Type: configs.NEWPID},
+	// 		{Type: configs.NEWUSER},
+	// 		{Type: configs.NEWNET},
+	// 		{Type: configs.NEWCGROUP},
+	// 	}),
+	// 	Cgroups: &configs.Cgroup{
+	// 		Name:   "test-container",
+	// 		Parent: "system",
+	// 		Resources: &configs.Resources{
+	// 			Memory:  int64(memoryLimit),
+	// 			Devices: devices,
+	// 		},
+	// 	},
+	// 	MaskPaths: []string{
+	// 		"/proc/kcore",
+	// 		"/sys/firmware",
+	// 	},
+	// 	ReadonlyPaths: []string{
+	// 		"/proc/sys", "/proc/sysrq-trigger", "/proc/irq", "/proc/bus",
+	// 	},
+	// 	Devices:  specconv.AllowedDevices,
+	// 	Hostname: "testing",
+	// 	Mounts: []*configs.Mount{
+	// 		{
+	// 			Source:      "proc",
+	// 			Destination: "/proc",
+	// 			Device:      "proc",
+	// 			Flags:       defaultMountFlags,
+	// 		},
+	// 		{
+	// 			Source:      "tmpfs",
+	// 			Destination: "/dev",
+	// 			Device:      "tmpfs",
+	// 			Flags:       unix.MS_NOSUID | unix.MS_STRICTATIME,
+	// 			Data:        "mode=755",
+	// 		},
+	// 		{
+	// 			Source:      "devpts",
+	// 			Destination: "/dev/pts",
+	// 			Device:      "devpts",
+	// 			Flags:       unix.MS_NOSUID | unix.MS_NOEXEC,
+	// 			Data:        "newinstance,ptmxmode=0666,mode=0620,gid=5",
+	// 		},
+	// 		{
+	// 			Device:      "tmpfs",
+	// 			Source:      "shm",
+	// 			Destination: "/dev/shm",
+	// 			Data:        "mode=1777,size=65536k",
+	// 			Flags:       defaultMountFlags,
+	// 		},
+	// 		{
+	// 			Source:      "mqueue",
+	// 			Destination: "/dev/mqueue",
+	// 			Device:      "mqueue",
+	// 			Flags:       defaultMountFlags,
+	// 		},
+	// 		{
+	// 			Source:      "sysfs",
+	// 			Destination: "/sys",
+	// 			Device:      "sysfs",
+	// 			Flags:       defaultMountFlags | unix.MS_RDONLY,
+	// 		},
+	// 	},
+	// 	UidMappings: []configs.IDMap{
+	// 		{
+	// 			ContainerID: 0,
+	// 			HostID:      0,
+	// 			Size:        65536,
+	// 		},
+	// 	},
+	// 	GidMappings: []configs.IDMap{
+	// 		{
+	// 			ContainerID: 0,
+	// 			HostID:      0,
+	// 			Size:        65536,
+	// 		},
+	// 	},
+	// 	Networks: []*configs.Network{
+	// 		{
+	// 			Type:    "loopback",
+	// 			Address: "127.0.0.1/0",
+	// 			Gateway: "localhost",
+	// 		},
+	// 	},
+	// 	Rlimits: []configs.Rlimit{
+	// 		{
+	// 			Type: unix.RLIMIT_NOFILE,
+	// 			Hard: uint64(15),
+	// 			Soft: uint64(15),
+	// 		},
+	// 		{
+	// 			Type: unix.RLIMIT_STACK,
+	// 			Hard: uint64(memoryLimit),
+	// 			Soft: uint64(memoryLimit),
+	// 		},
+	// 	},
+	// }
 
 	// _ = configGrader
-	// Batch(factory, config)
-	Interaction(factory, config, configGrader)
+	Batch(factory, config)
+	// Interaction(factory, config, configGrader)
 }

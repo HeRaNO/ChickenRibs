@@ -7,10 +7,10 @@
   - [Alpine Linux](https://www.alpinelinux.org/downloads/)
   - [Ubuntu Base](https://cdimage.ubuntu.com/ubuntu-base/releases/)
   - [Arch Linux](https://mirror.rackspace.com/archlinux/iso/latest/)
-- 在 rootfs 里建立一个普通用户，比如 test
+- 在 rootfs 里建立一个普通用户，比如 test（也可以直接用 root，方便测试）
 - 在 rootfs 里建立一个文件夹作为测试用文件夹，比如 `/judge-test`
 
-改一下代码里的 rootfs 路径，然后差不多就可以用了。
+改一下代码里的 rootfs 路径，然后差不多就可以用了，注意运行时要用 root 权限运行。
 
 需要注意的是，Alpine Linux 用的是 musl libc 而一般大家都用 glibc，注意两个库的差别可能导致程序无法运行。
 

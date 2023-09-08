@@ -10,6 +10,9 @@ import (
 
 func Interaction(factory libcontainer.Factory, config *configs.Config, configGrader *configs.Config) {
 	reader1, writer1, err := os.Pipe()
+	if err != nil {
+		panic(err)
+	}
 	reader2, writer2, err := os.Pipe()
 	if err != nil {
 		panic(err)
