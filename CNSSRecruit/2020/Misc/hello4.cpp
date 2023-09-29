@@ -4,6 +4,6 @@ extern "C" {
 
 int main()
 {
-	printf("Hi, CNSS\n");
+	printf("Hi, CNSS!\n");
 	return 0;
 }
