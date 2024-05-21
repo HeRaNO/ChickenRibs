@@ -1,6 +1,10 @@
 import sys
 import matplotlib.pyplot as plt
 
+algs = [('dcqcn', 'DCQCN'), ('dctcp', 'DCTCP'),
+		('hpcc', 'HPCC'), ('timely', 'TIMELY'),
+		('powerInt', 'PowerTCP - INT'), ('powerDelay', 'PowerTCP - Delay')]
+
 def read(s, i):
 	time = []
 	tput = []
@@ -15,22 +19,21 @@ def read(s, i):
 			tput.append(nowTput)
 	return time, tput
 
-now_analyze = 'timely'
-pic_name = f'{now_analyze}.png'
-time_1, tput_1 = read(now_analyze, 1)
-time_2, tput_2 = read(now_analyze, 2)
-time_3, tput_3 = read(now_analyze, 3)
-time_4, tput_4 = read(now_analyze, 4)
+for now_analyze, title in algs:
+	time_1, tput_1 = read(now_analyze, 1)
+	time_2, tput_2 = read(now_analyze, 2)
+	time_3, tput_3 = read(now_analyze, 3)
+	time_4, tput_4 = read(now_analyze, 4)
 
-assert time_1 == time_2
-assert time_2 == time_3
-assert time_3 == time_4
+	assert time_1 == time_2
+	assert time_2 == time_3
+	assert time_3 == time_4
 
-plt.plot(time_1, tput_1, label='flow-1', color = 'red')
-plt.plot(time_1, tput_2, label='flow-2', color = 'brown')
-plt.plot(time_1, tput_3, label='flow-3', color = 'green')
-plt.plot(time_1, tput_4, label='flow-4', color = 'blue')
-plt.title('TIMELY')
+	plt.plot(time_1, tput_1, label='flow-1', color = 'red')
+	plt.plot(time_1, tput_2, label='flow-2', color = 'brown')
+	plt.plot(time_1, tput_3, label='flow-3', color = 'green')
+	plt.plot(time_1, tput_4, label='flow-4', color = 'blue')
+	plt.title(title)
 
-plt.tight_layout(pad=1.0)
-plt.savefig(pic_name)
+	plt.tight_layout(pad=1.0)
+	plt.savefig(f'{now_analyze}.png')

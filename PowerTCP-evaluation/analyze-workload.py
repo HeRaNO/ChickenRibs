@@ -1,10 +1,12 @@
 algs = ['dcqcn', 'dctcp', 'hpcc', 'powerDelay', 'powerInt', 'timely']
 loads = ['0.2', '0.4', '0.6', '0.8', '0.9', '0.95']
+req = '0'
+query = '0'
 
 for alg in algs:
 	for load in loads:
 		fct_slowdown = []
-		with open(f'result-{alg}-{load}-0-0.fct', 'r') as f:
+		with open(f'result-{alg}-{load}-{req}-{query}.fct', 'r') as f:
 			for line in f:
 				x = line.strip().split()
 				fct, base_fct = int(x[1]), int(x[5])
