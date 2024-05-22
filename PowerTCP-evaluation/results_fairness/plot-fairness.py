@@ -1,11 +1,8 @@
-import sys
 import matplotlib.pyplot as plt
 
 algs = [('dcqcn', 'DCQCN'), ('dctcp', 'DCTCP'),
 		('hpcc', 'HPCC'), ('timely', 'TIMELY'),
 		('powerInt', 'PowerTCP - INT'), ('powerDelay', 'PowerTCP - Delay')]
-
-# algs = [('powerInt', 'PowerTCP - INT')]
 
 for now_analyze, title in algs:
 	def read(s, i):
@@ -42,10 +39,6 @@ for now_analyze, title in algs:
 	ax.set_title(title)
 	ax.legend(handles=[line1, line2, line3, line4], loc='upper right')
 
-	# plt.plot(time_1, tput_1, label='flow-1', color = 'red')
-	# plt.plot(time_1, tput_2, label='flow-2', color = 'brown')
-	# plt.plot(time_1, tput_3, label='flow-3', color = 'green')
-	# plt.plot(time_1, tput_4, label='flow-4', color = 'blue')
 	plt.title(title)
 
 	plt.tight_layout(pad=1.0)

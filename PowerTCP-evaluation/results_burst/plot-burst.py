@@ -1,4 +1,3 @@
-import sys
 import matplotlib.pyplot as plt
 
 algs = [('dcqcn', 'DCQCN'), ('dctcp', 'DCTCP'),
