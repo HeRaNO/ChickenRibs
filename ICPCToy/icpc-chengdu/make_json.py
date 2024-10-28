@@ -1,7 +1,5 @@
 import json
 import random
-import string
-import argparse
 
 random.seed()
 
@@ -15,8 +13,6 @@ L = 10
 
 with open("seats.json") as f:
 	pos_ip_map = json.loads(f.read())
-
-print(pos_ip_map["F18"])
 
 def gen_passwd(length):
 	pwd_part = []
@@ -65,11 +61,8 @@ def get_affiliation_id(org):
 
 for team in all_team:
 	team_info = team.strip().split(',')
-	print(team_info)
 	team_pos = team_info[5]
-	print(team_pos)
 	team_pos = team_pos[0] + team_pos[1:].rjust(2, '0')
-	print(team_pos)
 	teams.append({
 		'id': team_pos,
 		'group_ids': ["participants"],
