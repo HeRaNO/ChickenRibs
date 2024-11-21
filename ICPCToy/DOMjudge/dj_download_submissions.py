@@ -9,7 +9,7 @@ from tqdm.asyncio import tqdm
 
 parser = argparse.ArgumentParser(description='Download all submissions from DOMjudge.')
 parser.add_argument('url', type=str, help='DOMjudge url. Example: http://localhost/domjudge')
-parser.add_argument('cid', type=int, help='Contest ID.')
+parser.add_argument('cid', type=str, help='Contest ID.')
 parser.add_argument('-u', '--username', type=str, default='admin', help='DOMjudge admin username. Default: admin')
 args = parser.parse_args()
 
