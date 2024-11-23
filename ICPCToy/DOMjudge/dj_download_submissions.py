@@ -50,6 +50,8 @@ async def main_downloading():
 				resp.raise_for_status()
 				files = await resp.json()
 
+			if len(files) > 1:
+				print(f'More than 1 files found! submission_id: {sub_id}')
 			file = files[0]
 			file_name = '-'.join([rec['team_id'], sub_id, file['filename']])
 			file_path = os.path.join(code_path, file_name)
