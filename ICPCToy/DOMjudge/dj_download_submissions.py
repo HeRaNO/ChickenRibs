@@ -9,7 +9,7 @@ from tqdm.asyncio import tqdm
 
 parser = argparse.ArgumentParser(description='Download all submissions from DOMjudge.')
 parser.add_argument('url', type=str, help='DOMjudge url. Example: http://localhost/domjudge')
-parser.add_argument('cid', type=str, help='Contest ID.')
+parser.add_argument('cid', type=str, help='Contest ID. If data_source of DOMjudge is set to 1, use external ID, otherwise internal ID.')
 parser.add_argument('-u', '--username', type=str, default='admin', help='DOMjudge admin username. Default: admin')
 args = parser.parse_args()
 
@@ -50,12 +50,12 @@ async def main_downloading():
 				resp.raise_for_status()
 				files = await resp.json()
 
-			if len(files) > 1:
-				print(f'More than 1 files found! submission_id: {sub_id}')
-			file = files[0]
-			file_name = '-'.join([rec['team_id'], sub_id, file['filename']])
-			file_path = os.path.join(code_path, file_name)
-			await write_file(file_path, b64decode(file['source']))
+			tasks = []
+			for file in files:
+				file_name = '-'.join([rec['team_id'], sub_id, file['filename']])
+				file_path = os.path.join(code_path, file_name)
+				tasks.append(write_file(file_path, b64decode(file['source'])))
+			await asyncio.gather(*tasks)
 
 		tasks = [download_one(rec) for rec in sub_list]
 		await tqdm.gather(*tasks)
