@@ -67,6 +67,7 @@ for team in all_team:
 		'id': team_pos,
 		'group_ids': ["participants"],
 		'name': team_info[1],
+		'display_name': team[1],
 		'members': make_members(team_info[2:5]),
 		'organization_id': f'org_{get_affiliation_id(team_info[0])}',
 		'room': team_pos

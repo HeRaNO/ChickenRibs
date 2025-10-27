@@ -1,0 +1,46 @@
+#cloud-config
+autoinstall:
+  version: 1
+  locale: en_US.UTF-8
+  keyboard:
+    layout: us
+  timezone: Asia/Shanghai
+  apt:
+    preserve_sources_list: false
+    mirror-selection:
+      primary:
+        - uri: https://mirrors.cloud.tencent.com/ubuntu/
+  ssh:
+    install-server: true
+  late-commands:
+    # switch to CGroup v1
+    - curtin in-target -- sed -i '/^GRUB_CMDLINE_LINUX_DEFAULT=.*/c\GRUB_CMDLINE_LINUX_DEFAULT="quiet splash cgroup_enable=memory swapaccount=1 systemd.unified_cgroup_hierarchy=0"' /etc/default/grub
+    - curtin in-target -- update-grub
+  user-data:
+    user:
+      name: judge
+      sudo: 'ALL=(ALL) NOPASSWD:ALL'
+      lock_passwd: false
+      # use "openssl passwd -6 passw0rd" to generate a SHA-512-hashed password
+      passwd: '$6$5cCLNpuHHG0cLIVB$J.Xq4404iHJsRK8Bh8D6tnOp9zniv1fVrThuE24gQlh3.d8G9kpTSuTmQsF4iWwekjZVzWVTao3EKvkduO.n8/'
+      ssh_authorized_keys:
+        - # your SSH public key
+    chpasswd:
+      expire: false
+    hostname: judgers
+    allow_public_ssh_keys: true
+    runcmd:
+      # install docker
+      - apt-get update
+      - apt-get install -y ca-certificates curl
+      - install -m 0755 -d /etc/apt/keyrings
+      - curl -fsSL https://mirrors.cloud.tencent.com/docker-ce/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+      - echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://mirrors.cloud.tencent.com/docker-ce/linux/ubuntu/ $(. /etc/os-release && echo "$VERSION_CODENAME") stable" |   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+      - apt-get update
+      - apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+      - systemctl start docker
+      # load judgehost image
+      - docker load -i /opt/jh.tar.gz
+      # enable environment checker
+      - systemctl enable env-checker
+      - systemctl start env-checker

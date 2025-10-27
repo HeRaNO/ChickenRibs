@@ -1,0 +1,16 @@
+[Unit]
+Description=Environment checker
+ConditionFileIsExecutable=/opt/isolate-check-environment
+After=multi-user.target
+Wants=multi-user.target
+
+[Service]
+ExecStart=/opt/isolate-check-environment -e
+
+# If your judge server have P and E-core, do not uncomment the next two lines,
+# which will cause the service always restarting.
+# Restart=on-failure
+# RestartSec=2s
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,342 @@
+#!/bin/bash
+#
+# Identifies potential sources issues when using isolate.
+#
+#     (c) 2017 Bernard Blackham <bernard@blackham.com.au>
+#     (c) 2022-2025 Martin Mares <mj@ucw.cz>
+#     (c) 2024 Stephan Gomer <me@sadfun.org>
+#
+
+usage() {
+    cat <<EOT >&2
+Usage: $0 [-q|--quiet] [-e|--execute]
+
+Use this script to identify sources of run-time variability and other issues on
+Linux machines which may affect isolate.
+
+See manual page for details.
+EOT
+    exit 2
+}
+
+# Parse options.
+args=$(getopt -o "ehq" --long "execute,help,quiet" -- "$@") || usage
+eval set -- "$args"
+quiet=
+execute=
+while : ; do
+    case "$1" in
+        -q|--quiet) quiet=1 ; shift ;;
+        -e|--execute) execute=1 ; shift ;;
+        -h|--help) usage ;;
+        --) shift ; break ;;
+        *) usage ;;
+    esac
+done
+[ -n "$*" ] && usage
+
+# Some helper boilerplate machinery.
+exit_status=0
+if [ -n "$TERM" -a "$TERM" != dumb ] ; then
+	red=$(tput setaf 1)
+	green=$(tput setaf 2)
+	yellow=$(tput setaf 3)
+	normal=$(tput sgr0)
+else
+	red=
+	green=
+	yellow=
+	normal=
+fi
+
+# Return true (0) if we are being quiet.
+quiet() {
+    [ -n "$quiet" ]
+}
+
+# Print all arguments to stderr as warning.
+warn() {
+    quiet || echo "${yellow}WARNING:${normal}" "$*" >&2
+}
+
+# Print first argument to stderr as warning, and second argument to stdout as
+# the recommended remedial action, or execute if --execute is given.
+action() {
+    quiet || warn "$1"
+    if [ -n "$execute" ] ; then
+        quiet || echo "+ $2"
+        sh -c "$2"
+    else
+        quiet || echo $2
+    fi
+}
+
+print_start_check() {
+    quiet && return
+    print_check_status=1
+    echo -n "Checking for $@ ... " >&2
+}
+
+print_fail() {
+    exit_status=1
+    quiet && return
+    [ -n "$print_check_status" ] && echo "${red}FAIL${normal}" >&2
+    print_check_status=
+}
+
+print_dubious() {
+    exit_status=1
+    quiet && return
+    [ -n "$print_check_status" ] && echo "${yellow}CAUTION${normal}" >&2
+    print_check_status=
+}
+
+print_skipped() {
+    quiet && return
+    [ -n "$print_check_status" ] && echo "SKIPPED (not detected)" >&2
+    print_check_status=
+}
+
+print_finish() {
+    quiet && return
+    [ -n "$print_check_status" ] && echo "${green}PASS${normal}" >&2
+    print_check_status=
+}
+
+# Check that cgroups are enabled.
+cgroup_check() {
+    local cgroup=$1
+    print_start_check "cgroup support for $cgroup"
+    if ! test -f "$cg_root/$cgroup" ; then
+        print_dubious
+        warn "the $cgroup is not present. isolate --cg cannot be used."
+    fi
+    print_finish
+}
+
+# Check that cgroups are enabled.
+# We use cgrp v1, skip that
+# if ! cg_root=$(isolate --print-cg-root 2>/dev/null) ; then
+#     warn "cgroup root not found. isolate --cg cannot be used."
+#     exit_status=1
+# else
+#     quiet || echo "Using cgroup root: $cg_root"
+#     cgroup_check cpuset.cpus
+#     cgroup_check cpuset.mems
+#     cgroup_check cpu.stat
+#     cgroup_check cgroup.procs
+#     cgroup_check memory.events
+#     cgroup_check memory.max
+# fi
+
+# Check that swap is either disabled or accounted for.
+swap_check() {
+    print_start_check "swap"
+    # If swap is disabled, there is nothing to worry about.
+    local swaps
+    swaps=$(swapon --noheadings)
+    if [ -n "$swaps" ] ; then
+        # Swap is enabled.  We had better have the memory.swap support in the memory cgroup.
+        if ! test -f "$cg_root/memory.swap.current" ; then
+            print_fail
+            action \
+                "swap is enabled, but swap accounting is not. isolate will not be able to enforce memory limits." \
+                "swapoff -a"
+        else
+            print_dubious
+            warn "swap is enabled, and although accounted for, may still give run-time variability under memory pressure."
+        fi
+    fi
+    print_finish
+}
+# swap_check
+
+# Check that SMT is disabled.
+smt_check() {
+    print_start_check "simultaneous multithreading"
+    local val
+    if val="$(cat /sys/devices/system/cpu/smt/active 2>/dev/null)" ; then
+        if [ "$val" -ne 0 ] ; then
+            print_fail
+
+            val="$(cat /sys/devices/system/cpu/smt/control)"
+            if [ "$val" != "notimplemented" ] ; then
+                action \
+                    "simultaneous multithreading is enabled." \
+                    "echo off > /sys/devices/system/cpu/smt/control"
+            else
+                warn "SMT is enabled, but runtime SMT toggling is not supported. Add 'nosmt=1' to the kernel command line."
+            fi
+        fi
+    else
+        print_skipped
+    fi
+    print_finish
+}
+smt_check
+
+# Check that CPU frequency scaling is disabled.
+cpufreq_check() {
+    print_start_check "CPU frequency scaling"
+    local anycpus policy
+    anycpus=
+    # Ensure cpufreq governor is set to performance on all CPUs
+    for cpufreq_file in $(find /sys/devices/system/cpu/cpufreq/ -name scaling_governor) ; do
+        if policy=$(cat $cpufreq_file 2>/dev/null) ; then
+            if [ "$policy" != "performance" ] ; then
+                print_fail
+                action \
+                    "cpufreq governor set to '$policy', but 'performance' would be better" \
+                    "echo performance > $cpufreq_file"
+            fi
+        fi
+        anycpus=1
+    done
+    [ -z "$anycpus" ] && print_skipped
+    print_finish
+}
+cpufreq_check
+
+# Check that Intel frequency boost is disabled
+intel_boost_check() {
+    print_start_check "Intel frequency boost"
+    local val
+    if val=$(cat /sys/devices/system/cpu/intel_pstate/no_turbo 2>/dev/null) ; then
+        if [ "$val" -ne 1 ] ; then
+            print_fail
+            action \
+                "frequency boosting is enabled." \
+                "echo 1 > /sys/devices/system/cpu/intel_pstate/no_turbo"
+        fi
+    else
+        print_skipped
+    fi
+    print_finish
+}
+intel_boost_check
+
+# Check that general frequency boost is disabled
+general_boost_check() {
+    print_start_check "general frequency boost"
+    local val
+    if val=$(cat /sys/devices/system/cpu/cpufreq/boost 2>/dev/null) ; then
+        if [ "$val" -ne 0 ] ; then
+            print_fail
+            action \
+                "frequency boosting is enabled." \
+                "echo 0 > /sys/devices/system/cpu/cpufreq/boost"
+        fi
+    else
+        print_skipped
+    fi
+    print_finish
+}
+general_boost_check
+
+# Check that address space layout randomisation is disabled.
+aslr_check() {
+    print_start_check "kernel address space randomisation"
+    local val
+    if val=$(cat /proc/sys/kernel/randomize_va_space 2>/dev/null) ; then
+        if [ "$val" -ne 0 ] ; then
+            print_fail
+            action \
+                "address space randomisation is enabled." \
+                "echo 0 > /proc/sys/kernel/randomize_va_space"
+        fi
+    else
+        print_skipped
+    fi
+    print_finish
+}
+aslr_check
+
+# Check that transparent huge-pages are disabled, as this leads to
+# non-determinism depending on whether the kernel can allocate 2 MiB pages or
+# not.
+thp_check() {
+    print_start_check "transparent hugepage support"
+    local val
+    if val=$(cat /sys/kernel/mm/transparent_hugepage/enabled 2>/dev/null) ; then
+        case $val in
+            *'[never]'*) ;;
+            *) print_fail
+               action \
+                    "transparent hugepages are enabled." \
+                    "echo never > /sys/kernel/mm/transparent_hugepage/enabled" ;;
+        esac
+    fi
+    if val=$(cat /sys/kernel/mm/transparent_hugepage/defrag 2>/dev/null) ; then
+        case $val in
+            *'[never]'*) ;;
+            *) print_fail
+               action \
+                    "transparent hugepage defrag is enabled." \
+                    "echo never > /sys/kernel/mm/transparent_hugepage/defrag" ;;
+        esac
+    fi
+    if val=$(cat /sys/kernel/mm/transparent_hugepage/khugepaged/defrag 2>/dev/null) ; then
+        if [ "$val" -ne 0 ] ; then
+            print_fail
+            action \
+                "khugepaged defrag is enabled." \
+                "echo 0 > /sys/kernel/mm/transparent_hugepage/khugepaged/defrag"
+        fi
+    fi
+    print_finish
+}
+thp_check
+
+# Piping of core dumps to programs can make program crashes significantly
+# slower. Unfortunetely, dumps to pipes are not affected by RLIMIT_CORE,
+# so we cannot easily disable them inside the sandbox.
+core_check() {
+    print_start_check "core file pattern"
+    local val
+    if val="$(cat /proc/sys/kernel/core_pattern)" ; then
+        if [ "${val:0:1}" = '|' ] ; then
+            print_fail
+            action \
+                "core files are piped to a program." \
+                "echo core >/proc/sys/kernel/core_pattern"
+        fi
+    else
+        print_skipped
+    fi
+    print_finish
+}
+core_check
+
+# Without protected_hardlinks, the user running Isolate could trick it into
+# changing ownership of unrelated files.
+hardlink_check() {
+    print_start_check "hard link protection"
+    local val
+    if val="$(cat /proc/sys/fs/protected_hardlinks)" ; then
+        if [ $val = 0 ] ; then
+            print_fail
+            action \
+                "hardlink protection is disabled." \
+                "echo 1 >/proc/sys/fs/protected_hardlinks"
+        fi
+    else
+        print_skipped
+    fi
+    print_finish
+}
+hardlink_check
+
+# Check for an Intel CPU with both P-cores and E-cores.
+# At the moment, we have no automatic remedy.
+asymmetric_core_check() {
+    print_start_check "asymmetric cores"
+    if [ -d /sys/devices/cpu_atom -a -d /sys/devices/cpu_core ] ; then
+        print_dubious
+        quiet || warn "the CPU has a combination of P-cores and E-cores, core pinning should be used."
+    fi
+    print_finish
+}
+asymmetric_core_check
+
+
+exit $exit_status
