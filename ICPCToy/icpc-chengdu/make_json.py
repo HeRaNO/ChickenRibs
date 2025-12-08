@@ -1,5 +1,6 @@
 import json
 import random
+import pandas as pd
 
 random.seed()
 
@@ -11,7 +12,7 @@ with open('pinyin-table.txt', 'r') as f:
 
 L = 10
 
-with open("seats.json") as f:
+with open('seats.json') as f:
 	pos_ip_map = json.loads(f.read())
 
 def gen_passwd(length):
@@ -23,7 +24,7 @@ def gen_passwd(length):
 		len_sum += len(t)
 	return '-'.join(pwd_part)
 
-all_team = open('seats-all.csv', encoding='utf-8')
+all_team = pd.read_csv('seats-all.csv')
 
 affiliations_id_dict = {}
 affiliations_id = 1
@@ -60,23 +61,22 @@ def get_affiliation_id(org):
 	return res
 
 for team in all_team:
-	team_info = team.strip().split(',')
-	team_pos = team_info[5]
+	team_pos = team[5]
 	team_pos = team_pos[0] + team_pos[1:].rjust(2, '0')
 	teams.append({
 		'id': team_pos,
-		'group_ids': ["participants"],
-		'name': team_info[1],
+		'group_ids': ['participants'],
+		'name': team[1],
 		'display_name': team[1],
-		'members': make_members(team_info[2:5]),
-		'organization_id': f'org_{get_affiliation_id(team_info[0])}',
-		'room': team_pos
+		'members': make_members(team[2:5]),
+		'organization_id': f'org_{get_affiliation_id(team[0])}',
+		'location': {'description': team_pos}
 	})
 	pwd = gen_passwd(L)
 	pwd_warmup = gen_passwd(L)
 	accounts.append({
 		'id': f'account_{team_id}',
-		'username': 'team%03d' % (team_id),
+		'username': f'team{team_id:-03d}',
 		'password': pwd,
 		'type': 'team',
 		'team_id': team_pos,
@@ -84,14 +84,14 @@ for team in all_team:
 	})
 	accounts_warmup.append({
 		'id': f'warmup_account_{team_id}',
-		'username': 'warmup_team%03d' % (team_id),
+		'username': f'warmup_team{team_id:-03d}',
 		'password': pwd_warmup,
 		'type': 'team',
 		'team_id': team_pos,
 		'ip': pos_ip_map[team_pos]
 	})
-	passwd_let[team_pos] = [team_info[1], 'team%03d' % (team_id), pwd]
-	passwd_let_warmup[team_pos] = [team_info[1], 'warmup_team%03d' % (team_id), pwd_warmup]
+	passwd_let[team_pos] = [team[1], f'team{team_id:-03d}', pwd]
+	passwd_let_warmup[team_pos] = [team[1], f'warmup_team{team_id:-03d}', pwd_warmup]
 	team_id += 1
 
 affiliations = []
@@ -112,7 +112,7 @@ with open('organizations.json', 'w', encoding='utf-8') as f:
 with open('org-map.txt', 'w', encoding='utf-8') as f:
 	for org_id in org_map.keys():
 		f.write(' '.join([org_id, org_map[org_id]]))
-		f.write("\n")
+		f.write('\n')
 
 with open('teams.json', 'w', encoding='utf-8') as f:
 	f.write(json.dumps(teams, ensure_ascii=False))
