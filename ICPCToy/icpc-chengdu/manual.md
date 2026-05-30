@@ -11,6 +11,10 @@
 
 参考 [87ouo/cn-xcpc-docs](https://github.com/87ouo/cn-xcpc-docs/blob/master/DOMjudge_8.3.1%2BDebian_12.8%2BNGINX_1.22.1%2BPHP_8.2.24%2BPHP8.2-FPM.md#62-%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6) 中说明。
 
+### 配证书
+
+把 `etc/nginx-conf` 最下面有关 SSL 的行解除注释就好了。需要配一下自签证书。
+
 ### 配置 chrony
 
 安装之后修改 `/etc/chrony/chrony.conf`
@@ -153,11 +157,15 @@ systemctl restart vlc-screen
 
 ### 网络隔离
 
-运行的时候改一下 `[dj_ip]` 变成真实的 IP。如果已经在网络侧配了就不用配了。
+运行的时候改一下 `[dj_ip]` 变成真实的 IP。如果已经在网络侧配了就不用配了。如果网络侧没配，需要让 DHCP 的时候不要下发 DNS。
 
 ```bash
 ufw default allow incoming
-ufw default deny outgoing
+ufw default reject outgoing
+# 如果下发了 DNS 的话要阻断，因为默认是放行 DNS 的
+# 这样可以缓解 Firefox 启动时间过慢的问题
+ufw reject out 53/tcp
+ufw reject out 53/udp
 ufw allow out to [dj_ip]
 ufw enable
 ```
